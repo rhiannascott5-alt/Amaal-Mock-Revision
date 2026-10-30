@@ -1,0 +1,912 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>IGCSE Chemistry Revision Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Familjen+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: lab-bench pages. Sticky tab strip; each topic = live simulation beside a breakdown, flip-card questions beneath. */
+:root{
+  --paper:#f2f6f5; --surface:#ffffff; --ink:#15222a; --muted:#53636d; --line:#d3dde0; --grid:#e4ecee;
+  --accent:#0d6b62; --accent-soft:#dff0ed; --amber:#b25a0c; --warn-soft:#fbeee3; --good:#1b7a4c; --good-soft:#e1f3ea; --bad:#b3243b;
+  --f-display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0e1618; --surface:#142023; --ink:#e4eef0; --muted:#92a5ab; --line:#27373b; --grid:#1b2a2e;
+  --accent:#4fc4b6; --accent-soft:#143030; --amber:#ff9d4d; --warn-soft:#33241a; --good:#4cc38a; --good-soft:#15302a; --bad:#ff6b80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0e1618; --surface:#142023; --ink:#e4eef0; --muted:#92a5ab; --line:#27373b; --grid:#1b2a2e;
+  --accent:#4fc4b6; --accent-soft:#143030; --amber:#ff9d4d; --warn-soft:#33241a; --good:#4cc38a; --good-soft:#15302a; --bad:#ff6b80; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:28px 14px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4.4vw,42px);line-height:1.08;margin:6px 0 8px;text-wrap:balance;letter-spacing:-.01em}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+h2{font-family:var(--f-display);font-weight:700;font-size:26px;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:600;font-size:18px;margin:0 0 8px}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.tabrow{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;padding-block:8px 0}
+.tab{flex:0 0 auto;border:1px solid transparent;border-bottom:none;background:none;color:var(--muted);font:inherit;cursor:pointer;padding:8px 14px 10px;border-radius:8px 8px 0 0;text-align:left;display:flex;flex-direction:column;gap:1px;position:relative;top:1px}
+.tab .ref{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em}
+.tab .nm{font-family:var(--f-display);font-weight:600;font-size:15px;color:var(--ink)}
+.tab:hover .nm{color:var(--accent)}
+.tab[aria-selected="true"]{background:var(--surface);border-color:var(--line);color:var(--accent)}
+.tab[aria-selected="true"] .nm{color:var(--accent)}
+.tab.practice .nm::before{content:"✎ "}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+main{padding-block:22px 60px}
+.panel-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 20px;margin-bottom:18px}
+.panel-head p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.lab{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.lab{grid-template-columns:minmax(0,1fr)}}
+
+.scope{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.scope-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.scope canvas{display:block;width:100%}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 18px;padding:14px 14px 4px}
+.ctl label{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted)}
+.ctl label output{font-family:var(--f-mono);color:var(--ink);font-size:13px}
+.ctl input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0 0}
+.toggles{display:flex;flex-wrap:wrap;gap:8px 14px;padding:10px 14px 4px;align-items:center}
+.toggles .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:none;background:var(--surface);color:var(--muted);font:inherit;font-size:14px;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.check{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);padding:6px 4px}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line);margin:12px 0 0}
+.readout div{background:var(--surface);padding:10px 12px;min-width:0}
+.readout dt{font-size:12px;color:var(--muted);font-family:var(--f-mono);letter-spacing:.03em}
+.readout dd{margin:2px 0 0;font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.status{padding:10px 14px;font-size:14px;border-top:1px solid var(--line)}
+.status b{font-family:var(--f-display)}
+.status .eqn{font-family:var(--f-mono);font-size:13.5px;display:block;margin-top:4px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--surface);font:inherit;font-size:14px;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:none;color:var(--accent)}
+
+.notes{display:flex;flex-direction:column;gap:16px;min-width:0}
+.eqbox{background:var(--accent-soft);border-radius:10px;padding:12px 14px}
+.eqbox h3{font-size:14px;font-family:var(--f-mono);font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.eq{font-family:var(--f-mono);font-size:14.5px;display:flex;flex-wrap:wrap;gap:6px 22px}
+.steps{counter-reset:s;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px}
+.steps li::before{content:counter(s);font-family:var(--f-mono);font-size:12px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:grid;place-items:center;margin-top:1px}
+.traps{background:var(--warn-soft);border-radius:10px;padding:12px 14px}
+.traps h3{color:var(--amber);font-size:14px;font-family:var(--f-mono);font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.traps ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.try{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin:0}
+.try b{color:var(--ink)}
+
+.qhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin:36px 0 12px;border-top:1px solid var(--line);padding-top:22px}
+.qhead p{margin:0;color:var(--muted);font-size:14px}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+@media (max-width:420px){.qgrid{grid-template-columns:minmax(0,1fr)}}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.qcard.flipped{border-color:var(--good)}
+.qmeta{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.qmeta .mk{color:var(--accent)}
+.qcard.flipped .qmeta .side{color:var(--good)}
+.qbody{flex:1;min-width:0}
+.qbody p{margin:0 0 8px}
+.qbody p:last-child{margin-bottom:0}
+.qbody ol,.qbody ul{margin:4px 0 8px;padding-left:20px}
+.qbody .opts{list-style:upper-alpha;padding-left:24px}
+.ans{border-top:1px dashed var(--good);padding-top:10px}
+.ans .work{font-family:var(--f-mono);font-size:13.5px;background:var(--paper);border-radius:8px;padding:8px 10px;margin:6px 0;overflow-x:auto;white-space:pre-wrap}
+.ans .final{font-weight:700;color:var(--good)}
+.flip{align-self:flex-start;border:1px solid var(--accent);background:none;color:var(--accent);font:inherit;font-size:14px;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer}
+.flip:hover{background:var(--accent);color:var(--surface)}
+.qcard.flipped .flip{border-color:var(--good);color:var(--good)}
+.qcard.flipped .flip:hover{background:var(--good);color:var(--surface)}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;padding:5px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tally{margin-left:auto;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.ghostb{border:1px solid var(--line);background:none;color:var(--muted);font:inherit;font-size:13px;padding:5px 12px;border-radius:8px;cursor:pointer}
+sub,sup{font-size:.72em;line-height:0}
+footer{color:var(--muted);font-size:13px;padding-block:0 40px}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Pearson Edexcel International GCSE Chemistry 4CH1</div>
+    <h1>IGCSE Chemistry Revision Lab</h1>
+    <p class="lede">Five topics, each with a live simulation, a breakdown of the idea, the mistakes that cost marks and questions. Answers stay hidden until you press Show answer. The last tab has mixed exam questions from every topic.</p>
+  </header>
+</div>
+
+<nav class="tabs" aria-label="Topics">
+  <div class="wrap"><div class="tabrow" role="tablist" id="tablist">
+    <button class="tab" role="tab" data-tab="g1"><span class="ref">Spec 2.1–2.4</span><span class="nm">Group 1</span></button>
+    <button class="tab" role="tab" data-tab="g7"><span class="ref">Spec 2.5–2.8</span><span class="nm">Group 7</span></button>
+    <button class="tab" role="tab" data-tab="chrom"><span class="ref">Separation</span><span class="nm">Chromatography</span></button>
+    <button class="tab" role="tab" data-tab="air"><span class="ref">Spec 2.9, 2.10</span><span class="nm">Composition of air</span></button>
+    <button class="tab" role="tab" data-tab="burn"><span class="ref">Spec 2.11</span><span class="nm">Sulfur and burning</span></button>
+    <button class="tab practice" role="tab" data-tab="practice"><span class="ref">Mixed</span><span class="nm">Exam practice</span></button>
+  </div></div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ GROUP 1 ============ -->
+<section class="panel" id="p-g1" role="tabpanel" data-panel="g1" hidden>
+  <div class="panel-head"><div><div class="eyebrow">The alkali metals</div><h2>Group 1: reactions with water and the trend</h2>
+  <p>Drop a piece of each metal into water and compare. Switch to the atom view to see why reactivity increases down the group. Rubidium and caesium are predictions from the trend.</p></div></div>
+  <div class="lab">
+    <div class="scope">
+      <div class="scope-bar"><span id="g1-bar">piece of metal added to water</span><span id="g1-state"></span></div>
+      <canvas id="c-g1" aria-label="Animated reaction of a Group 1 metal with water, or atom diagram"></canvas>
+      <div class="toggles"><span class="lbl">Metal</span><div class="seg" id="g1-metal"></div></div>
+      <div class="toggles"><span class="lbl">View</span><div class="seg" id="g1-view"><button aria-pressed="true" data-v="rx">Reaction</button><button aria-pressed="false" data-v="atom">Atom</button></div>
+        <label class="check"><input type="checkbox" id="g1-ind"> Add universal indicator</label></div>
+      <dl class="readout">
+        <div><dt>melting point</dt><dd id="g1-mp"></dd></div>
+        <div><dt>electron shells</dt><dd id="g1-sh"></dd></div>
+        <div><dt>reactivity</dt><dd id="g1-re"></dd></div>
+        <div><dt>outer electron attraction</dt><dd id="g1-at"></dd></div>
+      </dl>
+      <div class="status" id="g1-status"></div>
+    </div>
+    <div class="notes">
+      <div class="eqbox"><h3>Key equations</h3><div class="eq"><span>metal + water → metal hydroxide + hydrogen</span><span>2Na + 2H<sub>2</sub>O → 2NaOH + H<sub>2</sub></span></div></div>
+      <div><h3>Breaking it down</h3><ol class="steps">
+        <li><div>All Group 1 atoms have <b>one electron in the outer shell</b>. They lose it to form a <b>1+ ion</b>, which is why they react in the same way.</div></li>
+        <li><div>With water they make <b>hydrogen gas</b> and a metal <b>hydroxide</b> that dissolves to give an <b>alkaline</b> solution. Universal indicator turns purple. Hydrogen gives a squeaky pop with a lit splint.</div></li>
+        <li><div>Down the group the reaction is faster: lithium fizzes, sodium melts, potassium burns with a lilac flame.</div></li>
+        <li><div><b>Why more reactive down the group:</b> more electron shells, so the outer electron is further from the nucleus and is more shielded by the inner shells. The attraction is weaker, so the electron is lost more easily.</div></li>
+        <li><div>Melting points fall down the group (Li 181 °C, Na 98 °C, K 63 °C). Rubidium and caesium follow the trend: lower melting points and more violent reactions.</div></li>
+        <li><div>They are soft, have low density, and are stored under oil.</div></li>
+      </ol></div>
+      <div class="traps"><h3>Common traps</h3><ul>
+        <li>Saying potassium is more reactive "because it has more electrons". The reason is the <b>distance and shielding</b> of the outer electron.</li>
+        <li>Forgetting state symbols: Na(s), H<sub>2</sub>O(l), NaOH(aq), H<sub>2</sub>(g).</li>
+        <li>Not balancing: 2Na + 2H<sub>2</sub>O → 2NaOH + H<sub>2</sub>. Check the hydrogens.</li>
+        <li>Writing "it explodes" for lithium. Match the observation to the metal.</li>
+      </ul></div>
+      <p class="try"><b>Try this:</b> switch to the atom view and step from Li to Cs. What happens to the pull on the outer electron? Then tick the indicator and compare how fast the water turns purple.</p>
+    </div>
+  </div>
+  <div class="qhead"><h3>Questions: Group 1</h3><p>Write your answer first, then press Show answer.</p></div>
+  <div class="qgrid" data-qset="g1"></div>
+</section>
+
+<!-- ============ GROUP 7 ============ -->
+<section class="panel" id="p-g7" role="tabpanel" data-panel="g7" hidden>
+  <div class="panel-head"><div><div class="eyebrow">The halogens</div><h2>Group 7: displacement reactions and the trend</h2>
+  <p>Choose a halogen solution and a potassium halide, then mix them. A more reactive halogen displaces a less reactive one. The atom view shows why reactivity falls down the group.</p></div></div>
+  <div class="lab">
+    <div class="scope">
+      <div class="scope-bar"><span id="g7-bar">add a halogen solution to a halide solution</span><span></span></div>
+      <canvas id="c-g7" aria-label="Test tube showing a halogen displacement reaction, or halogen atom diagrams"></canvas>
+      <div class="toggles"><span class="lbl">Add</span><div class="seg" id="g7-hal"><button aria-pressed="true" data-v="Cl">Chlorine water</button><button aria-pressed="false" data-v="Br">Bromine water</button><button aria-pressed="false" data-v="I">Iodine solution</button></div></div>
+      <div class="toggles"><span class="lbl">To</span><div class="seg" id="g7-hld"><button aria-pressed="false" data-v="Cl">Potassium chloride</button><button aria-pressed="true" data-v="Br">Potassium bromide</button><button aria-pressed="false" data-v="I">Potassium iodide</button></div></div>
+      <div class="toggles"><div class="seg" id="g7-view"><button aria-pressed="true" data-v="tube">Test tube</button><button aria-pressed="false" data-v="atom">Atoms</button></div><button class="btn" id="g7-mix">Mix</button><button class="btn ghost" id="g7-reset">Reset</button></div>
+      <dl class="readout">
+        <div><dt>reaction?</dt><dd id="g7-yes"></dd></div>
+        <div><dt>colour seen</dt><dd id="g7-col"></dd></div>
+        <div><dt>more reactive</dt><dd id="g7-more"></dd></div>
+      </dl>
+      <div class="status" id="g7-status"></div>
+    </div>
+    <div class="notes">
+      <div class="eqbox"><h3>Key equations</h3><div class="eq"><span>Cl<sub>2</sub> + 2KBr → 2KCl + Br<sub>2</sub></span><span>Cl<sub>2</sub> + 2Br⁻ → 2Cl⁻ + Br<sub>2</sub></span></div></div>
+      <div><h3>Breaking it down</h3><ol class="steps">
+        <li><div>Halogens exist as <b>diatomic molecules</b> (Cl<sub>2</sub>, Br<sub>2</sub>, I<sub>2</sub>). Chlorine is a pale green gas, bromine a red-brown liquid, iodine a grey-black solid. Boiling points rise down the group.</div></li>
+        <li><div>A more reactive halogen <b>displaces</b> a less reactive halogen from a solution of its halide. Reactivity order: <b>chlorine &gt; bromine &gt; iodine</b>.</div></li>
+        <li><div>Solution colours: bromine water is <b>orange</b>, iodine solution is <b>brown</b>, chlorine water is pale green or colourless.</div></li>
+        <li><div>In the ionic equation the potassium ions are <b>spectator ions</b>. The halogen molecule gains electrons (reduction) and the halide ion loses them (oxidation).</div></li>
+        <li><div><b>Why reactivity falls down the group:</b> a halogen atom has to <b>gain</b> an electron. Lower in the group there are more shells, so the incoming electron goes into a shell further from the nucleus with more shielding and is attracted less strongly.</div></li>
+        <li><div>Predict: fluorine is more reactive than chlorine. Astatine is a black solid and less reactive than iodine.</div></li>
+      </ol></div>
+      <div class="traps"><h3>Common traps</h3><ul>
+        <li>Mixing up the trends: Group 1 gets <b>more</b> reactive down the group, Group 7 gets <b>less</b> reactive.</li>
+        <li>Writing atoms (Cl) instead of molecules (Cl<sub>2</sub>) in equations.</li>
+        <li>Writing "iodine is displaced" as an observation. The observation is that the solution turns brown.</li>
+        <li>Saying "no reaction" without a reason. Give it: bromine is less reactive than chlorine.</li>
+      </ul></div>
+      <p class="try"><b>Try this:</b> test all nine combinations. Which halogen displaces both of the others? Which displaces neither?</p>
+    </div>
+  </div>
+  <div class="qhead"><h3>Questions: Group 7</h3><p>Write your answer first, then press Show answer.</p></div>
+  <div class="qgrid" data-qset="g7"></div>
+</section>
+
+<!-- ============ CHROMATOGRAPHY ============ -->
+<section class="panel" id="p-chrom" role="tabpanel" data-panel="chrom" hidden>
+  <div class="panel-head"><div><div class="eyebrow">Paper chromatography</div><h2>Chromatography and Rf values</h2>
+  <p>Run the solvent up the paper, then identify the dyes in an unknown ink by comparing spots with reference dyes. Change the solvent and watch the Rf values change. Switch on the mistakes to see what goes wrong.</p></div></div>
+  <div class="lab">
+    <div class="scope">
+      <div class="scope-bar"><span>paper strip · lanes: unknown ink X and reference dyes P, Q, R, S</span><span id="ch-state"></span></div>
+      <canvas id="c-chrom" aria-label="Paper chromatogram with a solvent front moving up"></canvas>
+      <div class="toggles"><span class="lbl">Solvent</span><div class="seg" id="ch-solv"><button aria-pressed="true" data-v="water">Water</button><button aria-pressed="false" data-v="ethanol">Ethanol</button></div>
+        <span class="lbl">Unknown ink X</span><div class="seg" id="ch-mix"><button aria-pressed="true" data-v="1">Ink 1</button><button aria-pressed="false" data-v="2">Ink 2</button><button aria-pressed="false" data-v="3">Ink 3</button></div></div>
+      <div class="toggles"><button class="btn" id="ch-run">Run</button><button class="btn ghost" id="ch-reset">Reset</button>
+        <label class="check"><input type="checkbox" id="ch-pen"> Baseline drawn in pen</label>
+        <label class="check"><input type="checkbox" id="ch-high"> Solvent level above baseline</label></div>
+      <div class="controls"><div class="ctl"><label for="ch-p">Solvent front <output id="ch-p-o"></output></label><input type="range" id="ch-p" min="0" max="100" step="1" value="100"></div></div>
+      <div class="toggles"><span class="lbl">Measure spot</span><div class="seg" id="ch-meas"></div></div>
+      <dl class="readout">
+        <div><dt>solvent front distance</dt><dd id="ch-F"></dd></div>
+        <div><dt>spot distance</dt><dd id="ch-d"></dd></div>
+        <div><dt>Rf = spot ÷ solvent</dt><dd id="ch-rf"></dd></div>
+        <div><dt>matches reference</dt><dd id="ch-match"></dd></div>
+      </dl>
+      <div class="status" id="ch-status"></div>
+    </div>
+    <div class="notes">
+      <div class="eqbox"><h3>Key equation</h3><div class="eq"><span>Rf = distance moved by the substance ÷ distance moved by the solvent front</span></div></div>
+      <div><h3>Breaking it down</h3><ol class="steps">
+        <li><div>Draw the <b>baseline in pencil</b> and put a small spot of each sample on it. Stand the paper in solvent with the <b>solvent level below the baseline</b>.</div></li>
+        <li><div>The solvent is the <b>mobile phase</b> and moves up the paper, the <b>stationary phase</b>. Substances that dissolve better in the solvent and stick less to the paper travel further.</div></li>
+        <li><div>Take the paper out before the solvent reaches the top and <b>mark the solvent front</b> straight away.</div></li>
+        <li><div>A <b>pure substance gives one spot</b>. A mixture gives several. Spots at the same height with the same colour as a reference are the same substance.</div></li>
+        <li><div>Rf is a ratio, so it has <b>no units</b> and is between 0 and 1. Measure the spot from the baseline to the <b>centre</b> of the spot.</div></li>
+        <li><div>Rf depends on the <b>solvent</b>. Compare spots only from the same run, or use the same solvent.</div></li>
+      </ol></div>
+      <div class="traps"><h3>Common traps</h3><ul>
+        <li>Measuring from the bottom of the paper instead of from the baseline.</li>
+        <li>Writing units on Rf, or giving a value above 1.</li>
+        <li>Saying the solvent has to be above the baseline. If it is, the dyes wash into the solvent.</li>
+        <li>Using pen for the baseline. Ink is also a mixture of dyes, and it runs up the paper.</li>
+        <li>Forgetting that colourless spots need a locating agent such as ninhydrin or UV light.</li>
+      </ul></div>
+      <p class="try"><b>Try this:</b> run Ink 2 in water and identify its dyes. Then switch to ethanol. Why can't you compare a water run with an ethanol run?</p>
+    </div>
+  </div>
+  <div class="qhead"><h3>Questions: chromatography</h3><p>Write your answer first, then press Show answer.</p></div>
+  <div class="qgrid" data-qset="chrom"></div>
+</section>
+
+<!-- ============ AIR ============ -->
+<section class="panel" id="p-air" role="tabpanel" data-panel="air" hidden>
+  <div class="panel-head"><div><div class="eyebrow">Gases in the atmosphere</div><h2>Composition of air and measuring oxygen</h2>
+  <p>Heat copper while air is passed back and forth between two gas syringes. The copper takes the oxygen out. Change the heating time and see how the answer depends on doing the experiment properly.</p></div></div>
+  <div class="lab">
+    <div class="scope">
+      <div class="scope-bar"><span id="air-bar">two gas syringes and heated copper</span><span></span></div>
+      <canvas id="c-air" aria-label="Gas syringe experiment, or bar chart of the composition of air"></canvas>
+      <div class="toggles"><div class="seg" id="air-view"><button aria-pressed="true" data-v="exp">Experiment</button><button aria-pressed="false" data-v="comp">Composition of air</button></div>
+        <label class="check"><input type="checkbox" id="air-cool" checked> Cool to room temperature before reading</label></div>
+      <div class="controls">
+        <div class="ctl"><label for="air-t">Heating time <output id="air-t-o"></output></label><input type="range" id="air-t" min="0" max="6" step="0.1" value="6"></div>
+        <div class="ctl"><label for="air-v">Starting volume of air <output id="air-v-o"></output></label><input type="range" id="air-v" min="60" max="150" step="5" value="100"></div>
+      </div>
+      <dl class="readout" id="air-read"></dl>
+      <div class="status" id="air-status"></div>
+    </div>
+    <div class="notes">
+      <div class="eqbox"><h3>Key equations</h3><div class="eq"><span>2Cu + O<sub>2</sub> → 2CuO</span><span>% oxygen = (volume used ÷ starting volume) × 100</span></div></div>
+      <div><h3>Breaking it down</h3><ol class="steps">
+        <li><div>Dry air is about <b>78% nitrogen, 21% oxygen, 0.9% argon and 0.04% carbon dioxide</b> by volume.</div></li>
+        <li><div>Hot copper reacts with oxygen to make black copper(II) oxide. Nitrogen and argon do not react, so the volume of gas falls by about <b>one fifth</b>.</div></li>
+        <li><div>Pass the air <b>back and forth</b> over the copper so that all the oxygen reacts, and use <b>excess copper</b>.</div></li>
+        <li><div>Let the apparatus <b>cool to room temperature</b> before reading. Hot gas takes up more space, so a hot reading is too big and the oxygen looks too low.</div></li>
+        <li><div>Other methods use damp iron wool (rusting) or phosphorus burning in a closed container. Each removes oxygen so the volume falls.</div></li>
+        <li><div>Carbon dioxide is only a tiny fraction of air but is a <b>greenhouse gas</b>. Rising levels may contribute to climate change.</div></li>
+      </ol></div>
+      <div class="traps"><h3>Common traps</h3><ul>
+        <li>Giving "20% oxygen, 80% nitrogen" as the exact answer. Know 78% and 21% and the small gases.</li>
+        <li>Dividing by the final volume instead of the <b>starting</b> volume.</li>
+        <li>Forgetting to cool the apparatus, or stopping heating too early.</li>
+        <li>Saying the copper "absorbs" the air. It reacts with the oxygen only.</li>
+      </ul></div>
+      <p class="try"><b>Try this:</b> set the heating time to 1 minute and read the oxygen. Then untick the cooling box at 6 minutes. What happens to the result, and why?</p>
+    </div>
+  </div>
+  <div class="qhead"><h3>Questions: composition of air</h3><p>Write your answer first, then press Show answer.</p></div>
+  <div class="qgrid" data-qset="air"></div>
+</section>
+
+<!-- ============ BURN ============ -->
+<section class="panel" id="p-burn" role="tabpanel" data-panel="burn" hidden>
+  <div class="panel-head"><div><div class="eyebrow">Combustion of elements</div><h2>Sulfur and burning elements in oxygen</h2>
+  <p>Burn magnesium, hydrogen or sulfur in a gas jar of oxygen. Add water with universal indicator to see whether the oxide is acidic or basic. Then explore how sulfur dioxide in the air makes rain more acidic.</p></div></div>
+  <div class="lab">
+    <div class="scope">
+      <div class="scope-bar"><span id="bn-bar">gas jar of oxygen</span><span></span></div>
+      <canvas id="c-burn" aria-label="A gas jar with an element burning, and a pH scale for rain"></canvas>
+      <div class="toggles"><span class="lbl">Burn</span><div class="seg" id="bn-el"><button aria-pressed="false" data-v="Mg">Magnesium</button><button aria-pressed="false" data-v="H">Hydrogen</button><button aria-pressed="true" data-v="S">Sulfur</button></div>
+        <button class="btn" id="bn-go">Ignite</button><button class="btn ghost" id="bn-reset">Reset</button>
+        <label class="check"><input type="checkbox" id="bn-water"> Add water and universal indicator</label></div>
+      <div class="controls"><div class="ctl"><label for="bn-ppm">Sulfur dioxide in the air <output id="bn-ppm-o"></output></label><input type="range" id="bn-ppm" min="0" max="100" step="1" value="40"></div></div>
+      <dl class="readout" id="bn-read"></dl>
+      <div class="status" id="bn-status"></div>
+    </div>
+    <div class="notes">
+      <div class="eqbox"><h3>Key equations</h3><div class="eq"><span>2Mg + O<sub>2</sub> → 2MgO</span><span>2H<sub>2</sub> + O<sub>2</sub> → 2H<sub>2</sub>O</span><span>S + O<sub>2</sub> → SO<sub>2</sub></span></div></div>
+      <div><h3>Breaking it down</h3><ol class="steps">
+        <li><div><b>Magnesium</b> burns with a bright white flame and leaves a white powder, magnesium oxide. Metal oxides are <b>basic</b>.</div></li>
+        <li><div><b>Hydrogen</b> burns with a pale blue flame and makes water. A squeaky pop shows hydrogen. Water turns white anhydrous copper(II) sulfate blue.</div></li>
+        <li><div><b>Sulfur</b> burns with a blue flame to make <b>sulfur dioxide</b>, a colourless, choking gas. Non-metal oxides are <b>acidic</b>.</div></li>
+        <li><div>Sulfur dioxide dissolves in water to give an <b>acidic</b> solution, so universal indicator turns red or orange. Magnesium oxide solution is alkaline (blue). Water is neutral (green).</div></li>
+        <li><div><b>Acid rain:</b> fuels such as coal and oil contain sulfur. Burning them releases sulfur dioxide, which dissolves in rain. Acid rain damages limestone buildings, kills fish and harms trees.</div></li>
+        <li><div>Reduce it by removing sulfur from fuels, or by passing waste gases through calcium oxide or calcium carbonate (flue gas desulfurisation).</div></li>
+      </ol></div>
+      <div class="traps"><h3>Common traps</h3><ul>
+        <li>Saying sulfur burns with a "yellow flame". It is blue in oxygen.</li>
+        <li>Confusing sulfur dioxide with carbon dioxide as the cause of acid rain. Carbon dioxide causes climate change.</li>
+        <li>Unbalanced equations. 2Mg + O<sub>2</sub> → 2MgO needs the 2s.</li>
+        <li>Calling every oxide acidic. Metal oxides are basic, non-metal oxides are acidic.</li>
+      </ul></div>
+      <p class="try"><b>Try this:</b> burn each element, tick the indicator box and compare the three colours. Then slide the sulfur dioxide level and watch the rain pH.</p>
+    </div>
+  </div>
+  <div class="qhead"><h3>Questions: sulfur and burning</h3><p>Write your answer first, then press Show answer.</p></div>
+  <div class="qgrid" data-qset="burn"></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="panel" id="p-practice" role="tabpanel" data-panel="practice" hidden>
+  <div class="panel-head"><div><div class="eyebrow">Mixed exam-style questions</div><h2>Exam practice</h2>
+  <p>New questions from all five topics: multiple choice, calculations, explanations and two 6-mark answers. Write your answer down first, then press Show answer to mark it.</p></div></div>
+  <div class="filters" id="filters">
+    <button class="chip" aria-pressed="true" data-f="all">All</button>
+    <button class="chip" aria-pressed="false" data-f="mc">Multiple choice</button>
+    <button class="chip" aria-pressed="false" data-f="g1">Group 1</button>
+    <button class="chip" aria-pressed="false" data-f="g7">Group 7</button>
+    <button class="chip" aria-pressed="false" data-f="chrom">Chromatography</button>
+    <button class="chip" aria-pressed="false" data-f="air">Air</button>
+    <button class="chip" aria-pressed="false" data-f="burn">Sulfur and burning</button>
+    <button class="chip" aria-pressed="false" data-f="extended">6-mark</button>
+    <span class="tally" id="tally"></span>
+    <button class="ghostb" id="reset">Hide all answers</button>
+  </div>
+  <div class="qgrid" data-qset="practice"></div>
+</section>
+</main>
+
+<div class="wrap"><footer>Built for Pearson Edexcel International GCSE Chemistry (4CH1). Marks are shown on each card. Questions and mark schemes are written for revision and are not from past papers.</footer></div>
+
+<script>
+/* ---------------- question bank ---------------- */
+const Q = {
+g1:[
+ {m:2,q:`<p>Name the two products formed when potassium reacts with water.</p>`,
+  a:`<p class="final">Potassium hydroxide and hydrogen.</p>`},
+ {m:3,q:`<p>Write a balanced symbol equation, with state symbols, for the reaction of lithium with water.</p>`,
+  a:`<div class="work">2Li(s) + 2H₂O(l) → 2LiOH(aq) + H₂(g)</div><p>1 mark for correct formulae, 1 for balancing, 1 for state symbols.</p>`},
+ {m:2,q:`<p>Explain why sodium is stored under oil.</p>`,
+  a:`<p>It reacts with oxygen and with water vapour in the air, so the oil keeps air and moisture away from the metal.</p>`},
+ {m:3,q:`<p>Describe what you would see when a small piece of sodium is added to water containing universal indicator.</p>`,
+  a:`<ul><li>It floats and melts into a ball.</li><li>It moves around the surface, fizzing.</li><li>The indicator turns purple (alkaline) as the sodium gets smaller.</li></ul>`},
+ {m:4,q:`<p>Explain why potassium is more reactive than lithium. Refer to electronic structure.</p>`,
+  a:`<p>Potassium has more electron shells (4 compared with 2), so its outer electron is further from the nucleus and is more shielded. The attraction between the nucleus and the outer electron is weaker, so the electron is lost more easily and potassium reacts faster.</p>`},
+ {m:3,t:"stretch",q:`<p>Caesium is below rubidium in Group 1. Predict how its reaction with water compares with potassium, give the formula of the hydroxide formed and suggest a pH for the solution.</p>`,
+  a:`<p>Much more violent (it may explode). The hydroxide is CsOH. The solution is strongly alkaline, pH 13 to 14.</p>`}
+],
+g7:[
+ {m:3,q:`<p>State the colour and physical state of chlorine, bromine and iodine at room temperature.</p>`,
+  a:`<p>Chlorine: pale yellow-green gas. Bromine: red-brown liquid. Iodine: grey-black solid.</p>`},
+ {m:2,q:`<p>Write the formula of a chlorine molecule and name the type of bond between the atoms.</p>`,
+  a:`<p class="final">Cl₂, a covalent bond.</p>`},
+ {m:3,q:`<p>Chlorine water is added to potassium iodide solution. State what you see and write a word equation.</p>`,
+  a:`<p>The solution turns brown.</p><div class="work">chlorine + potassium iodide → potassium chloride + iodine</div>`},
+ {m:2,q:`<p>Write an ionic equation for the reaction of bromine with iodide ions.</p>`,
+  a:`<div class="work">Br₂ + 2I⁻ → 2Br⁻ + I₂</div>`},
+ {m:3,q:`<p>Explain why the boiling points of the halogens increase down the group.</p>`,
+  a:`<p>The molecules get larger, so the forces between molecules get stronger. More energy is needed to separate them, so the boiling point is higher. The covalent bonds inside the molecules do not break.</p>`},
+ {m:4,t:"stretch",q:`<p>Explain, in terms of electrons, why bromine can displace iodide ions but not chloride ions.</p>`,
+  a:`<p>Bromine is more reactive than iodine but less reactive than chlorine. A bromine atom has fewer shells than iodine, so its outer shell is closer to the nucleus with less shielding, and it attracts an extra electron more strongly. So it takes electrons from iodide ions. Chlorine attracts electrons more strongly than bromine, so bromine cannot take electrons from chloride ions.</p>`}
+],
+chrom:[
+ {m:2,q:`<p>Explain why the baseline is drawn in pencil, not pen.</p>`,
+  a:`<p>Pencil is graphite and does not dissolve in the solvent. Pen ink is made of dyes that would dissolve and run up the paper, giving extra spots.</p>`},
+ {m:2,q:`<p>In paper chromatography, name the mobile phase and the stationary phase.</p>`,
+  a:`<p class="final">Mobile phase: the solvent. Stationary phase: the paper.</p>`},
+ {m:2,q:`<p>A spot moves 4.2 cm while the solvent front moves 6.0 cm. Calculate the Rf value.</p>`,
+  a:`<div class="work">Rf = 4.2 ÷ 6.0</div><p class="final">Rf = 0.70</p>`},
+ {m:3,q:`<p>An unknown ink gives two spots with Rf values 0.25 and 0.62. Reference dyes in the same solvent have Rf values P 0.25, Q 0.45, R 0.62 and S 0.85. Identify the dyes in the ink and explain how you know.</p>`,
+  a:`<p>The ink contains dyes P and R. The spots have the same Rf values as P and R run in the same solvent, and there are no spots matching Q or S.</p>`},
+ {m:3,q:`<p>A student says the ink is a pure substance because it contains one colour. Explain how chromatography can show whether it is pure.</p>`,
+  a:`<p>Run the ink in several solvents. A pure substance gives a single spot in every solvent. If it is a mixture, it separates into more than one spot in at least one of them.</p>`},
+ {m:2,t:"stretch",q:`<p>The Rf value for dye P changes when ethanol replaces water. Suggest why.</p>`,
+  a:`<p>Dye P has a different solubility in ethanol than in water, so it moves a different distance relative to the solvent front.</p>`}
+],
+air:[
+ {m:2,q:`<p>State the approximate percentage by volume of nitrogen and of oxygen in dry air.</p>`,
+  a:`<p class="final">Nitrogen about 78%, oxygen about 21%.</p>`},
+ {m:2,q:`<p>In the copper and gas syringe experiment, explain why the apparatus must cool to room temperature before the final volume is read.</p>`,
+  a:`<p>Hot gas takes up more volume. If it is read hot, the final volume is too large, so the volume of oxygen used looks too small and the percentage is too low.</p>`},
+ {m:2,q:`<p>120 cm³ of air is passed over hot copper. The final volume is 95 cm³. Calculate the percentage of oxygen.</p>`,
+  a:`<div class="work">volume used = 120 − 95 = 25 cm³
+% = 25 ÷ 120 × 100</div><p class="final">20.8% (about 21%)</p>`},
+ {m:3,q:`<p>Give three features of the method that make the result more accurate.</p>`,
+  a:`<ul><li>Use excess copper so all the oxygen reacts.</li><li>Pass the air back and forth over the copper several times until the volume stops changing.</li><li>Cool to room temperature before reading the volume.</li></ul>`},
+ {m:3,q:`<p>Describe another experiment to find the percentage of oxygen in air using iron.</p>`,
+  a:`<p>Put damp iron wool in a closed tube standing in water. Over several days the iron rusts, using up oxygen, and water rises in the tube. The volume of the water that rises (about one fifth of the air) shows the oxygen used, so % oxygen = rise ÷ original volume × 100.</p>`},
+ {m:2,t:"stretch",q:`<p>Carbon dioxide is 0.04% of air. Name one process that adds it to the air and one that removes it.</p>`,
+  a:`<p>Adds: burning fuels, or respiration. Removes: photosynthesis (also dissolving in the oceans).</p>`}
+],
+burn:[
+ {m:3,q:`<p>Describe what you see when sulfur burns in oxygen and write a balanced equation.</p>`,
+  a:`<p>It burns with a blue flame and a colourless, choking gas forms.</p><div class="work">S + O₂ → SO₂</div>`},
+ {m:2,q:`<p>Write a balanced equation for magnesium burning in oxygen and state what you see.</p>`,
+  a:`<div class="work">2Mg + O₂ → 2MgO</div><p>A bright white flame, leaving a white solid.</p>`},
+ {m:2,q:`<p>Hydrogen burns in oxygen. Name the product and give a chemical test for it.</p>`,
+  a:`<p>The product is water. It turns white anhydrous copper(II) sulfate blue (or turns blue cobalt chloride paper pink).</p>`},
+ {m:3,q:`<p>Explain how burning fuels that contain sulfur causes acid rain.</p>`,
+  a:`<p>The sulfur burns to form sulfur dioxide, which goes into the air. It dissolves in rainwater to make an acidic solution, which falls as acid rain.</p>`},
+ {m:2,q:`<p>Magnesium oxide and sulfur dioxide are each added to water with universal indicator. State the colours expected and say whether each oxide is acidic or basic.</p>`,
+  a:`<p>Magnesium oxide: blue (alkaline), a basic oxide. Sulfur dioxide: red or orange (acidic), an acidic oxide.</p>`},
+ {m:3,t:"stretch",q:`<p>Suggest two ways to reduce the amount of sulfur dioxide released from a power station.</p>`,
+  a:`<p>Remove sulfur from the fuel before burning it. Pass the waste gases through calcium oxide or calcium carbonate, which reacts with the sulfur dioxide (flue gas desulfurisation).</p>`}
+],
+practice:[
+ {t:"mc g1",m:1,q:`<p>Which statement about Group 1 metals is correct?</p><ol class="opts"><li>Reactivity decreases down the group.</li><li>They form 2+ ions.</li><li>Melting point decreases down the group.</li><li>They react with water to form acidic solutions.</li></ol>`,
+  a:`<p class="final">C</p><p>Reactivity increases, they form 1+ ions and the solutions are alkaline.</p>`},
+ {t:"mc g7",m:1,q:`<p>What is the colour of iodine solution?</p><ol class="opts"><li>Colourless</li><li>Orange</li><li>Brown</li><li>Pale green</li></ol>`,
+  a:`<p class="final">C</p><p>Bromine water is orange.</p>`},
+ {t:"mc chrom",m:1,q:`<p>Which could be the Rf value of a spot?</p><ol class="opts"><li>1.4</li><li>0.45</li><li>−0.2</li><li>3.0 cm</li></ol>`,
+  a:`<p class="final">B</p><p>Rf is a ratio between 0 and 1 with no units.</p>`},
+ {t:"mc air",m:1,q:`<p>Which gas makes up about 78% of dry air?</p><ol class="opts"><li>Oxygen</li><li>Argon</li><li>Carbon dioxide</li><li>Nitrogen</li></ol>`,
+  a:`<p class="final">D</p>`},
+ {t:"mc burn",m:1,q:`<p>Which oxide forms an acidic solution in water?</p><ol class="opts"><li>Magnesium oxide</li><li>Sulfur dioxide</li><li>Calcium oxide</li><li>Sodium oxide</li></ol>`,
+  a:`<p class="final">B</p><p>Non-metal oxides are acidic. The other three are metal oxides.</p>`},
+ {t:"g7",m:4,q:`<p>Astatine is below iodine in Group 7. Predict its physical state and colour at room temperature, and whether astatine would displace iodine from potassium iodide solution. Give a reason.</p>`,
+  a:`<p>A black solid. It would not displace iodine, because astatine is less reactive than iodine. Reactivity falls down Group 7.</p>`},
+ {t:"g1",m:3,q:`<p>Lithium melts at 181 °C and potassium at 63 °C. Predict whether the melting point of rubidium is above 181 °C, between 63 °C and 181 °C, or below 63 °C. Explain.</p>`,
+  a:`<p>Below 63 °C. Melting points fall down Group 1, and rubidium is below potassium.</p>`},
+ {t:"chrom",m:3,q:`<p>On a chromatogram the solvent front is 8.0 cm from the baseline. Spot X is 2.0 cm, spot Y is 4.8 cm and a reference dye is 4.8 cm. Calculate the Rf of each spot and state what you can conclude.</p>`,
+  a:`<div class="work">X: 2.0 ÷ 8.0 = 0.25
+Y: 4.8 ÷ 8.0 = 0.60</div><p>Y has the same Rf as the reference, so Y is the reference dye.</p>`},
+ {t:"air",m:3,q:`<p>A student leaves damp iron wool in a sealed tube of air over water. After one week the gas volume falls from 100 cm³ to 79 cm³. Calculate the percentage of oxygen and explain why the volume decreased.</p>`,
+  a:`<div class="work">used = 100 − 79 = 21 cm³
+% = 21 ÷ 100 × 100</div><p class="final">21% oxygen</p><p>The iron reacted with oxygen and water to form rust, so the oxygen was used up.</p>`},
+ {t:"g1 g7",m:4,q:`<p>Sodium reacts with chlorine to form sodium chloride. Write the balanced equation and describe, in terms of electrons, how sodium chloride forms.</p>`,
+  a:`<div class="work">2Na + Cl₂ → 2NaCl</div><p>Each sodium atom loses one electron to form Na⁺. Each chlorine atom gains one electron to form Cl⁻. The oppositely charged ions attract in an ionic lattice.</p>`},
+ {t:"g7",m:4,q:`<p>Bromine water is added to sodium chloride solution and to sodium iodide solution. State what happens in each case and explain.</p>`,
+  a:`<p>Sodium chloride: no reaction, the orange colour stays, because bromine is less reactive than chlorine.</p><p>Sodium iodide: the solution turns brown because bromine is more reactive than iodine and displaces it.</p>`},
+ {t:"burn",m:3,q:`<p>Write a balanced equation for hydrogen burning in oxygen. State the colour of the flame and how you would show the product is water.</p>`,
+  a:`<div class="work">2H₂ + O₂ → 2H₂O</div><p>A pale blue flame. The product turns anhydrous copper(II) sulfate from white to blue.</p>`},
+ {t:"extended burn",m:6,q:`<p>Describe what happens when sulfur burns in air, and explain how this leads to damage to limestone buildings. Include equations and the type of oxide formed.</p>`,
+  a:`<p>Six marks from:</p><ul><li>Sulfur burns with a blue flame.</li><li>S + O₂ → SO₂, forming sulfur dioxide, a colourless choking gas.</li><li>Sulfur dioxide is an acidic oxide, because sulfur is a non-metal.</li><li>It dissolves in rainwater to form an acidic solution (acid rain).</li><li>Acid rain reacts with calcium carbonate in limestone.</li><li>This forms soluble compounds, so the stone wears away.</li><li>The same sulfur dioxide can come from burning fuels that contain sulfur.</li></ul>`},
+ {t:"extended g1 g7",m:6,q:`<p>Compare how the reactivity changes down Group 1 and down Group 7, and explain each trend using electronic structure.</p>`,
+  a:`<p>Six marks from:</p><ul><li>Group 1 reactivity increases down the group; Group 7 reactivity decreases.</li><li>Group 1 atoms lose their one outer electron to form 1+ ions; Group 7 atoms gain one electron to form 1− ions.</li><li>Down both groups the number of shells increases, so the outer shell is further from the nucleus and more shielded.</li><li>Group 1: weaker attraction means the outer electron is lost more easily.</li><li>Group 7: weaker attraction for an incoming electron means it is gained less easily.</li><li>Example: potassium reacts more violently with water than lithium; chlorine displaces bromine from potassium bromide but iodine does not.</li></ul>`}
+]
+};
+const TOPIC_NAME={g1:"Group 1",g7:"Group 7",chrom:"Chromatography",air:"Composition of air",burn:"Sulfur and burning"};
+
+/* ---------------- render question cards ---------------- */
+function card(topic,i,item){
+  const d=document.createElement('article');d.className='qcard';
+  const tags=(item.t||topic)+"";
+  d.dataset.tags=tags;
+  const lab=topic==='practice'?(TOPIC_NAME[tags.split(' ').find(x=>TOPIC_NAME[x])]||'Mixed'):'Q'+(i+1);
+  d.innerHTML=`<div class="qmeta"><span>${topic==='practice'?'Q'+(i+1)+' · '+lab:lab+(tags.includes('stretch')?' · stretch':'')}</span><span class="mk">[${item.m} mark${item.m>1?'s':''}]</span></div>
+  <div class="qbody"><div class="qtext">${item.q}</div><div class="ans" hidden>${item.a}</div></div>
+  <button class="flip" aria-expanded="false">Show answer</button>`;
+  const b=d.querySelector('.flip'),a=d.querySelector('.ans');
+  b.addEventListener('click',()=>{const on=a.hidden;a.hidden=!on;d.classList.toggle('flipped',on);b.textContent=on?'Hide answer':'Show answer';b.setAttribute('aria-expanded',on);tally()});
+  return d;
+}
+document.querySelectorAll('.qgrid').forEach(g=>{const k=g.dataset.qset;Q[k].forEach((it,i)=>g.appendChild(card(k,i,it)))});
+
+/* practice filters and tally */
+function tally(){const all=[...document.querySelectorAll('#p-practice .qcard')].filter(c=>!c.hidden);const done=all.filter(c=>c.classList.contains('flipped')).length;document.getElementById('tally').textContent=done+' of '+all.length+' answers shown'}
+document.querySelectorAll('#filters .chip').forEach(ch=>ch.addEventListener('click',()=>{
+  document.querySelectorAll('#filters .chip').forEach(x=>x.setAttribute('aria-pressed',x===ch));
+  const f=ch.dataset.f;
+  document.querySelectorAll('#p-practice .qcard').forEach(c=>{c.hidden=!(f==='all'||c.dataset.tags.split(' ').includes(f))});tally();
+}));
+document.getElementById('reset').addEventListener('click',()=>{document.querySelectorAll('#p-practice .qcard.flipped .flip').forEach(b=>b.click());tally()});
+tally();
+
+/* ---------------- tabs ---------------- */
+const TABS=['g1','g7','chrom','air','burn','practice'];
+let active='g1';
+function showTab(id,push){
+  if(!TABS.includes(id))id='g1';
+  active=id;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.dataset.panel!==id);
+  if(push&&location.hash!=='#'+id)history.replaceState(null,'','#'+id);
+  fitAll();
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{showTab(t.dataset.tab,true);window.scrollTo({top:0})}));
+window.addEventListener('hashchange',()=>showTab(location.hash.slice(1),false));
+
+/* ---------------- canvas helpers ---------------- */
+const $=s=>document.querySelector(s);
+const cvs={};
+function mk(id,ratio){const c=$('#'+id);const o={c,ctx:c.getContext('2d'),w:600,h:360,ratio};
+  o.fit=()=>{const w=Math.max(280,c.parentElement.clientWidth||600),h=Math.round(w*ratio),d=window.devicePixelRatio||1;
+    c.width=Math.round(w*d);c.height=Math.round(h*d);c.style.height=h+'px';o.w=w;o.h=h;o.ctx.setTransform(d,0,0,d,0,0)};
+  o.fit();cvs[id]=o;return o}
+function fitAll(){Object.values(cvs).forEach(o=>o.fit())}
+window.addEventListener('resize',fitAll);
+function tok(){const s=getComputedStyle(document.documentElement);const g=n=>s.getPropertyValue(n).trim();return{ink:g('--ink'),muted:g('--muted'),line:g('--line'),surface:g('--surface'),accent:g('--accent'),amber:g('--amber'),paper:g('--paper'),grid:g('--grid'),bad:g('--bad'),good:g('--good')}}
+function seg(id,fn){const el=document.getElementById(id);el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));fn(b.dataset.v)})}
+function setSeg(id,v){document.querySelectorAll('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===v))}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function lerp(a,b,t){return a+(b-a)*t}
+function hex2(h){h=h.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]}
+function mix(a,b,t){const A=hex2(a),B=hex2(b);return'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'}
+function phColor(p){const st=[[0,'#e0241c'],[2,'#ee4b1f'],[3,'#f08a24'],[4,'#f4c01f'],[5.5,'#d6d83a'],[7,'#3fae4a'],[9,'#2a8fb3'],[11,'#4a4fb8'],[14,'#6a2fa0']];
+  for(let i=1;i<st.length;i++){if(p<=st[i][0]){const t=(p-st[i-1][0])/(st[i][0]-st[i-1][0]);return mix(st[i-1][1],st[i][1],Math.max(0,Math.min(1,t)))}}return st[st.length-1][1]}
+function atom(ctx,cx,cy,shells,step,hi,C,opts){
+  opts=opts||{};const r0=opts.r0||0.26*step*1.6;
+  ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(cx,cy,opts.nuc||7,0,7);ctx.fill();
+  shells.forEach((n,i)=>{const r=r0+(i+0)*step;
+    ctx.strokeStyle=C.line;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.stroke();
+    const last=i===shells.length-1;
+    for(let k=0;k<n;k++){const a=k*2*Math.PI/n+i*0.55+(opts.rot||0)*(i%2?1:-1)*(0.25+0.1*i);
+      const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);
+      ctx.fillStyle=(last&&hi)?C.amber:C.accent;ctx.beginPath();ctx.arc(x,y,(last&&hi)?5:3,0,7);ctx.fill();
+      if(last&&hi&&k===0){ctx.strokeStyle=C.amber;ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);ctx.stroke();ctx.setLineDash([])}}
+  });
+  return r0+(shells.length-1)*step}
+const loop=[];
+function frame(t){requestAnimationFrame(frame);const dt=Math.min(0.05,(t-(frame.t||t))/1000);frame.t=t;const C=tok();loop.forEach(f=>f(dt,C))}
+
+/* ======================= GROUP 1 ======================= */
+const MET=[
+ {s:'Li',n:'Lithium',mp:181,sh:[2,1],sp:0.25,bub:4,dur:14,melt:false,flame:null,rel:1,obs:'Floats, fizzes steadily and moves slowly. It gets smaller and slowly disappears.',pred:false},
+ {s:'Na',n:'Sodium',mp:98,sh:[2,8,1],sp:0.8,bub:12,dur:8,melt:true,flame:null,rel:2,obs:'Floats and melts into a ball. Moves quickly across the surface, fizzing, and disappears.',pred:false},
+ {s:'K',n:'Potassium',mp:63,sh:[2,8,8,1],sp:1.6,bub:26,dur:4.5,melt:true,flame:'#b58be0',rel:3,obs:'Melts and darts about very fast. Violent fizzing and the hydrogen burns with a lilac flame.',pred:false},
+ {s:'Rb',n:'Rubidium',mp:39,sh:[2,8,18,8,1],sp:2.4,bub:40,dur:2.6,melt:true,flame:'#d36aa4',rel:4,obs:'Predicted: very violent, with a flame, and it may explode.',pred:true},
+ {s:'Cs',n:'Caesium',mp:29,sh:[2,8,18,18,8,1],sp:3.2,bub:55,dur:1.6,melt:true,flame:'#6f8bf0',rel:5,obs:'Predicted: explodes on contact with water.',pred:true}
+];
+const g1={m:MET[1],view:'rx',p:0,hold:0,t:0,ind:false,bubbles:[],flash:0,atomRot:0};
+const cG1=mk('c-g1',0.62);
+$('#g1-metal').innerHTML=MET.map(m=>`<button aria-pressed="${m.s==='Na'}" data-v="${m.s}">${m.s}${m.pred?'*':''}</button>`).join('');
+function g1text(){
+  const m=g1.m,n=m.sh.length+0;
+  $('#g1-mp').textContent=m.mp+' °C'+(m.pred?' (predicted)':'');
+  $('#g1-sh').textContent=m.sh.length+'  ('+m.sh.join(',')+')';
+  $('#g1-re').textContent='●'.repeat(m.rel)+'○'.repeat(5-m.rel);
+  const at=Math.round(100*4/(m.sh.length*m.sh.length)/ (4/4) );
+  $('#g1-at').textContent=Math.round(400/(m.sh.length*m.sh.length)/1)+'% of Li';
+  $('#g1-at').textContent=Math.round(100*(2*2)/(m.sh.length*m.sh.length))+'% of Li';
+  $('#g1-status').innerHTML='<b>'+m.n+'.</b> '+m.obs+'<span class="eqn">2'+m.s+'(s) + 2H<sub>2</sub>O(l) → 2'+m.s+'OH(aq) + H<sub>2</sub>(g)</span>'+(m.pred?'<span class="eqn">* prediction from the trend, not usually done in school</span>':'');
+  $('#g1-bar').textContent=g1.view==='rx'?'piece of '+m.n.toLowerCase()+' added to water':'atom of '+m.n.toLowerCase()+': outer electron in gold';
+}
+seg('g1-metal',v=>{g1.m=MET.find(x=>x.s===v);g1.p=0;g1.hold=0;g1.bubbles=[];g1text()});
+seg('g1-view',v=>{g1.view=v;g1text()});
+$('#g1-ind').addEventListener('change',e=>{g1.ind=e.target.checked});
+loop.push((dt,C)=>{
+  if(active!=='g1')return;
+  const o=cG1,ctx=o.ctx,w=o.w,h=o.h,m=g1.m;g1.t+=dt;g1.atomRot+=dt;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle=C.surface;ctx.fillRect(0,0,w,h);
+  if(g1.view==='rx'){
+    if(g1.p<1){g1.p=Math.min(1,g1.p+dt/m.dur)}else{g1.hold+=dt;if(g1.hold>1.4){g1.p=0;g1.hold=0;g1.bubbles=[]}}
+    const bx=w*0.2,bw=w*0.6,by=h*0.18,bh=h*0.7,wy=by+bh*0.28;
+    const water=g1.ind?mix('#3fae4a','#6a2fa0',Math.min(1,g1.p*1.1)):'#9fd0ea';
+    ctx.fillStyle=water;ctx.globalAlpha=g1.ind?0.9:0.55;ctx.fillRect(bx,wy,bw,by+bh-wy);ctx.globalAlpha=1;
+    ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx,by+bh);ctx.lineTo(bx+bw,by+bh);ctx.lineTo(bx+bw,by);ctx.stroke();
+    ctx.strokeStyle=C.muted;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(bx,wy);ctx.lineTo(bx+bw,wy);ctx.stroke();
+    // piece
+    const size=Math.max(0,1-g1.p),R=Math.max(1,26*Math.pow(size,0.6));
+    const sx=bx+bw/2+Math.sin(g1.t*m.sp*1.4)*bw*0.3*Math.min(1,m.sp/1.0),sy=wy-R*0.2;
+    if(g1.p<1){
+      ctx.fillStyle='#c4ccd2';ctx.strokeStyle=C.muted;ctx.lineWidth=1.5;
+      if(m.melt){ctx.beginPath();ctx.arc(sx,sy-R*0.3,R,0,7);ctx.fill();ctx.stroke()}else{ctx.fillRect(sx-R,sy-R*1.2,R*2,R*1.4);ctx.strokeRect(sx-R,sy-R*1.2,R*2,R*1.4)}
+      if(m.flame){const fh=R*1.8+Math.sin(g1.t*30)*5;ctx.fillStyle=m.flame;ctx.globalAlpha=0.75;ctx.beginPath();ctx.moveTo(sx-R*0.7,sy-R*0.5);ctx.quadraticCurveTo(sx-R*0.2,sy-fh,sx,sy-fh*1.25);ctx.quadraticCurveTo(sx+R*0.3,sy-fh*0.7,sx+R*0.7,sy-R*0.5);ctx.closePath();ctx.fill();ctx.globalAlpha=1}
+      // spawn bubbles
+      const n=m.bub*dt;for(let i=0;i<n+(Math.random()<n%1?1:0);i++)g1.bubbles.push({x:sx+(Math.random()-0.5)*R*2,y:sy+R*0.4,r:2+Math.random()*3,v:30+Math.random()*50});
+    }else if(m.rel>=4&&g1.hold<0.3){ctx.fillStyle='rgba(255,230,120,'+(0.8-g1.hold*2.5)+')';ctx.beginPath();ctx.arc(bx+bw/2,wy-20,60*(1+g1.hold*4),0,7);ctx.fill()}
+    g1.bubbles=g1.bubbles.filter(b=>{b.y-=b.v*dt;b.x+=Math.sin(b.y*0.1)*0.4;ctx.strokeStyle='rgba(255,255,255,0.95)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.stroke();return b.y>wy-60&&g1.bubbles.length<400});
+    ctx.fillStyle=C.muted;ctx.font='12px '+getComputedStyle(document.body).getPropertyValue('--f-mono');
+    ctx.fillText(m.n+' + water',bx+8,by+bh-8);
+    $('#g1-state').textContent=g1.p<1?Math.round(g1.p*100)+'% reacted':'reaction over';
+  }else{
+    $('#g1-state').textContent='';
+    const step=Math.min(w*0.4/(m.sh.length+0.6),h*0.46/(m.sh.length+0.4),46);
+    const R=atom(ctx,w*0.5,h*0.5,m.sh,step,true,C,{r0:step*0.9,rot:g1.atomRot});
+    ctx.fillStyle=C.muted;ctx.font='13px '+getComputedStyle(document.body).getPropertyValue('--f-mono');ctx.textAlign='left';
+    ctx.fillText(m.n+': '+m.sh.join(',')+' ('+m.sh.length+' shells)',12,22);
+    ctx.fillStyle=C.amber;ctx.fillText('outer electron',12,42);
+    // pull arrow: thickness falls with shells
+    ctx.strokeStyle=C.bad;ctx.lineWidth=Math.max(1,14/m.sh.length);ctx.globalAlpha=0.8;ctx.beginPath();ctx.moveTo(w*0.5+R+16,h*0.5);ctx.lineTo(w*0.5+R*0.6,h*0.5);ctx.stroke();ctx.globalAlpha=1;
+    ctx.fillStyle=C.muted;ctx.textAlign='right';ctx.fillText('pull on outer electron',w-12,h-14);ctx.textAlign='left';
+  }
+});
+g1text();
+
+/* ======================= GROUP 7 ======================= */
+const HAL={Cl:{n:'chlorine',ion:'chloride',rank:3,col:'#cfe8b6',colName:'pale green',sh:[2,8,7],f:'Cl'},Br:{n:'bromine',ion:'bromide',rank:2,col:'#f0a04a',colName:'orange',sh:[2,8,18,7],f:'Br'},I:{n:'iodine',ion:'iodide',rank:1,col:'#8a5a2b',colName:'brown',sh:[2,8,18,18,7],f:'I'}};
+const g7={hal:'Cl',hld:'Br',view:'tube',mixed:false,t:0,rot:0};
+const cG7=mk('c-g7',0.62);
+function g7out(){const a=HAL[g7.hal],b=HAL[g7.hld];const re=a.rank>b.rank;return{re,a,b,col:re?b.col:a.col,colName:re?b.colName:a.colName+' (no change)'}}
+function g7text(){
+  const o=g7out(),a=o.a,b=o.b;
+  $('#g7-yes').textContent=g7.mixed?(o.re?'Yes':'No'):'not mixed yet';
+  $('#g7-col').textContent=g7.mixed?o.colName:'colourless halide';
+  $('#g7-more').textContent=a.rank===b.rank?'same halogen':(a.rank>b.rank?a.n:b.n);
+  let s;
+  if(a.rank===b.rank)s='<b>Same halogen.</b> Chlorine added to a chloride gives no reaction. Pick a different halide.';
+  else if(o.re)s='<b>'+a.n[0].toUpperCase()+a.n.slice(1)+' is more reactive than '+b.n+', so it displaces it.</b><span class="eqn">'+a.f+'<sub>2</sub> + 2K'+b.f+' → 2K'+a.f+' + '+b.f+'<sub>2</sub></span><span class="eqn">'+a.f+'<sub>2</sub> + 2'+b.f+'⁻ → 2'+a.f+'⁻ + '+b.f+'<sub>2</sub></span><span class="eqn">'+a.n+' + potassium '+b.ion+' → potassium '+a.ion+' + '+b.n+'</span>';
+  else s='<b>No reaction.</b> '+a.n[0].toUpperCase()+a.n.slice(1)+' is less reactive than '+b.n+', so it cannot displace it from potassium '+b.ion+'. The colour stays as the added halogen.';
+  $('#g7-status').innerHTML=s;
+}
+seg('g7-hal',v=>{g7.hal=v;g7.mixed=false;g7.t=0;g7text()});
+seg('g7-hld',v=>{g7.hld=v;g7.mixed=false;g7.t=0;g7text()});
+seg('g7-view',v=>{g7.view=v;$('#g7-bar').textContent=v==='tube'?'add a halogen solution to a halide solution':'halogen atoms: where an extra electron would go';});
+$('#g7-mix').addEventListener('click',()=>{setSeg('g7-view','tube');g7.view='tube';g7.mixed=true;g7.t=0;g7text()});
+$('#g7-reset').addEventListener('click',()=>{g7.mixed=false;g7.t=0;g7text()});
+loop.push((dt,C)=>{
+  if(active!=='g7')return;
+  const o=cG7,ctx=o.ctx,w=o.w,h=o.h;g7.rot+=dt;if(g7.mixed)g7.t+=dt;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle=C.surface;ctx.fillRect(0,0,w,h);
+  const mono=getComputedStyle(document.body).getPropertyValue('--f-mono');
+  if(g7.view==='tube'){
+    const out=g7out(),a=HAL[g7.hal];
+    const tx=w*0.5-45,tw=90,ty=h*0.12,th=h*0.78;
+    // liquid colour
+    let col='#e8f1f4';
+    if(g7.mixed){const k=Math.min(1,Math.max(0,(g7.t-0.8)/2));col=g7.t<0.8?'#e8f1f4':mix(a.col,out.col,out.re?k:0)}
+    const ly=ty+th*0.35;
+    ctx.fillStyle=col;ctx.globalAlpha=0.9;rr(ctx,tx+3,ly,tw-6,th-th*0.35-3,tw/2-3);ctx.fill();ctx.globalAlpha=1;
+    ctx.fillRect(tx+3,ly,tw-6,th*0.3);
+    ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx,ty+th-tw/2);ctx.arc(tx+tw/2,ty+th-tw/2,tw/2,Math.PI,0,true);ctx.lineTo(tx+tw,ty);ctx.stroke();
+    // drops
+    if(g7.mixed&&g7.t<0.9){for(let i=0;i<5;i++){const y=lerp(ty-10,ly+10,Math.min(1,(g7.t*1.2+i*0.12)%1));ctx.fillStyle=a.col;ctx.beginPath();ctx.arc(tx+tw/2+(i-2)*8,y,5,0,7);ctx.fill()}}
+    ctx.fillStyle=C.muted;ctx.font='12px '+mono;ctx.textAlign='center';
+    ctx.fillText('potassium '+HAL[g7.hld].ion+' solution',w*0.5,h-6);
+    ctx.textAlign='left';
+    ctx.fillStyle=C.ink;ctx.fillText('adding: '+a.n+' ('+a.colName+')',12,22);
+    if(g7.mixed&&g7.t>3){ctx.fillStyle=out.re?C.good:C.bad;ctx.font='bold 14px '+mono;ctx.fillText(out.re?'colour change: displacement':'no colour change from the halogen added',12,44)}
+  }else{
+    const hs=['Cl','Br','I'],step=Math.min(w/(3*5.4),h*0.42/(5.6),18);
+    hs.forEach((k,i)=>{const cx=w*(0.18+i*0.32),cy=h*0.46;const R=atom(ctx,cx,cy,HAL[k].sh,step,true,C,{r0:step*1.1,nuc:5,rot:g7.rot});
+      ctx.fillStyle=C.ink;ctx.font='bold 13px '+mono;ctx.textAlign='center';ctx.fillText(HAL[k].f+'  '+HAL[k].sh.join(','),cx,h*0.46+R+22);
+      ctx.fillStyle=C.muted;ctx.font='12px '+mono;ctx.fillText(HAL[k].sh.length+' shells',cx,h*0.46+R+40)});
+    ctx.fillStyle=C.muted;ctx.textAlign='left';ctx.font='12px '+mono;
+    ctx.fillText('gold = 7 outer electrons. A new electron joins the outer shell.',12,20);
+    ctx.fillStyle=C.amber;ctx.fillText('fewer shells → stronger attraction → more reactive',12,h-12);
+  }
+});
+g7text();
+
+/* ======================= CHROMATOGRAPHY ======================= */
+const DYE={P:{col:'#2f5fd0'},Q:{col:'#d03a3a'},R:{col:'#d8b020'},S:{col:'#2f9a5a'}};
+const RF={water:{P:.25,Q:.45,R:.62,S:.85},ethanol:{P:.38,Q:.30,R:.75,S:.55}};
+const MIX={1:['P','R'],2:['Q','R','S'],3:['P','Q','S']};
+const ch={solv:'water',mix:1,p:1,play:false,pen:false,high:false,meas:'X1'};
+const cCh=mk('c-chrom',0.85);
+function chMeasButtons(){
+  const items=['P','Q','R','S'].map(k=>[k,k]).concat(MIX[ch.mix].map((k,i)=>['X'+(i+1),'X spot '+(i+1)]));
+  $('#ch-meas').innerHTML=items.map(it=>`<button aria-pressed="${it[0]===ch.meas}" data-v="${it[0]}">${it[1]}</button>`).join('');
+  if(!items.find(x=>x[0]===ch.meas)){ch.meas='X1';setSeg('ch-meas','X1')}
+}
+function chRf(key){ if(key.startsWith('X')){return RF[ch.solv][MIX[ch.mix][+key.slice(1)-1]]} return RF[ch.solv][key]}
+function chText(){
+  const F=ch.p*9.5,rf=chRf(ch.meas),d=rf*F;
+  $('#ch-p-o').textContent=(ch.p*9.5).toFixed(1)+' cm';
+  $('#ch-F').textContent=F.toFixed(1)+' cm';
+  $('#ch-d').textContent=ch.high?'no spots':d.toFixed(1)+' cm';
+  $('#ch-rf').textContent=ch.high?'n/a':(F>0.05?rf.toFixed(2):'run the solvent');
+  let mt='';if(ch.meas.startsWith('X')){const best=Object.keys(RF[ch.solv]).find(k=>Math.abs(RF[ch.solv][k]-rf)<0.03);mt=best?'dye '+best:'none'}else mt='(reference)';
+  $('#ch-match').textContent=mt;
+  const names=MIX[ch.mix].join(' and ');
+  let s='<b>Ink '+ch.mix+' in '+ch.solv+'.</b> ';
+  if(ch.high)s+='The solvent level is above the baseline, so the dyes dissolve into the solvent and nothing travels up the paper. Keep it below the baseline.';
+  else if(ch.pen)s+='A pen baseline is also a mixture of dyes. The ink runs up the paper and adds extra spots. Use pencil.';
+  else s+=ch.p>0.98?'Mark the solvent front. Ink '+ch.mix+' contains dyes '+names+' (compare each X spot with the references).':'The solvent is still moving up the paper. Stop before it reaches the top.';
+  $('#ch-status').innerHTML=s;
+  $('#ch-state').textContent=ch.play?'running':'';
+}
+seg('ch-solv',v=>{ch.solv=v;chText()});
+seg('ch-mix',v=>{ch.mix=+v;chMeasButtons();chText()});
+document.getElementById('ch-meas').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#ch-meas button').forEach(x=>x.setAttribute('aria-pressed',x===b));ch.meas=b.dataset.v;chText()});
+$('#ch-run').addEventListener('click',()=>{if(ch.p>=0.999)ch.p=0;ch.play=!ch.play;$('#ch-run').textContent=ch.play?'Pause':'Run';chText()});
+$('#ch-reset').addEventListener('click',()=>{ch.p=0;ch.play=false;$('#ch-p').value=0;$('#ch-run').textContent='Run';chText()});
+$('#ch-p').addEventListener('input',e=>{ch.p=+e.target.value/100;ch.play=false;$('#ch-run').textContent='Run';chText()});
+$('#ch-pen').addEventListener('change',e=>{ch.pen=e.target.checked;chText()});
+$('#ch-high').addEventListener('change',e=>{ch.high=e.target.checked;chText()});
+loop.push((dt,C)=>{
+  if(active!=='chrom')return;
+  if(ch.play){ch.p=Math.min(1,ch.p+dt/7);$('#ch-p').value=Math.round(ch.p*100);if(ch.p>=1){ch.play=false;$('#ch-run').textContent='Run'}chText()}
+  $('#ch-p-o').textContent=(ch.p*9.5).toFixed(1)+' cm';
+  const o=cCh,ctx=o.ctx,w=o.w,h=o.h,mono=getComputedStyle(document.body).getPropertyValue('--f-mono');
+  ctx.clearRect(0,0,w,h);ctx.fillStyle=C.surface;ctx.fillRect(0,0,w,h);
+  const pw=Math.min(w*0.74,420),px=w*0.12,py=h*0.05,ph=h*0.88,cm=ph/12;
+  const bottom=py+ph;const base=bottom-1.5*cm;
+  // tank solvent
+  const lvl=ch.high?2.4:0.8;
+  ctx.fillStyle=ch.solv==='water'?'rgba(120,180,220,.35)':'rgba(220,200,120,.35)';
+  ctx.fillRect(px-12,bottom-lvl*cm,pw+24,lvl*cm+2);
+  // paper
+  ctx.fillStyle=C.paper;ctx.strokeStyle=C.line;ctx.lineWidth=1.5;ctx.fillRect(px,py,pw,ph);ctx.strokeRect(px,py,pw,ph);
+  // wetted
+  const F=ch.p*9.5;const frontY=base-F*cm;
+  ctx.fillStyle=ch.solv==='water'?'rgba(120,180,220,.25)':'rgba(220,200,120,.25)';
+    ctx.fillStyle=ch.solv==='water'?'rgba(120,180,220,.25)':'rgba(220,200,120,.25)';
+  ctx.fillRect(px,frontY,pw,bottom-frontY-0);
+  // baseline
+  ctx.strokeStyle=ch.pen?'#2a2a2a':'#8a8f94';ctx.lineWidth=ch.pen?2.5:1.5;ctx.beginPath();ctx.moveTo(px+6,base);ctx.lineTo(px+pw-6,base);ctx.stroke();
+  const lanes=['X','P','Q','R','S'];const lw=pw/lanes.length;
+  ctx.font='12px '+mono;ctx.textAlign='center';
+  lanes.forEach((L,i)=>{const cx=px+lw*(i+0.5);ctx.fillStyle=C.ink;ctx.fillText(L,cx,py+14);
+    const spots=L==='X'?MIX[ch.mix].map((k,j)=>({k,id:'X'+(j+1)})):[{k:L,id:L}];
+    if(ch.pen){ctx.fillStyle='rgba(60,60,60,.35)';ctx.fillRect(cx-lw*0.3,base-F*cm*0.4,lw*0.6,F*cm*0.4)}
+    spots.forEach(sp=>{
+      if(ch.high){ctx.fillStyle=DYE[sp.k].col;ctx.globalAlpha=0.25;ctx.beginPath();ctx.arc(cx,base+4,5,0,7);ctx.fill();ctx.globalAlpha=1;return}
+      const d=RF[ch.solv][sp.k]*F;const y=base-d*cm;
+      const r=0.25*cm*(1+Math.min(0.5,d*0.04));
+      ctx.fillStyle=DYE[sp.k].col;ctx.globalAlpha=0.9;ctx.beginPath();ctx.ellipse(cx,y,r*1.3,r,0,0,7);ctx.fill();ctx.globalAlpha=1;
+      if(sp.id===ch.meas){ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(cx,y,r*1.3+4,r+4,0,0,7);ctx.stroke()}
+    });
+  });
+  // front
+  if(F>0.05){ctx.strokeStyle=C.bad;ctx.setLineDash([6,4]);ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px,frontY);ctx.lineTo(px+pw,frontY);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=C.bad;ctx.textAlign='left';ctx.fillText('solvent front',px+pw+6,frontY+4)}
+  ctx.fillStyle=C.muted;ctx.textAlign='left';ctx.fillText('baseline',px+pw+6,base+4);
+  // measure bracket
+  if(!ch.high&&F>0.05){const rf=chRf(ch.meas),y=base-rf*F*cm;const bx=px-22;ctx.strokeStyle=C.amber;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(bx,base);ctx.lineTo(bx,y);ctx.moveTo(bx-4,base);ctx.lineTo(bx+4,base);ctx.moveTo(bx-4,y);ctx.lineTo(bx+4,y);ctx.stroke();
+    ctx.strokeStyle=C.bad;ctx.beginPath();ctx.moveTo(bx-9,base);ctx.lineTo(bx-9,frontY);ctx.stroke()}
+});
+chMeasButtons();chText();
+
+/* ======================= AIR ======================= */
+const air={view:'exp',t:6,v:100,cool:true,phase:0};
+const cAir=mk('c-air',0.6);
+function airCalc(){
+  const f=air.t<=0?0:1-Math.exp(-air.t/1.5);const used=0.209*air.v*f;
+  const exp=(air.t>0&&!air.cool)?0.08*air.v:0;
+  const fin=air.v-used+exp,measured=air.v-fin;
+  return{f,used,fin,pct:measured/air.v*100};
+}
+function airText(){
+  $('#air-t-o').textContent=air.t.toFixed(1)+' min';$('#air-v-o').textContent=air.v+' cm³';
+  if(air.view==='exp'){const c=airCalc();
+    $('#air-read').innerHTML=`<div><dt>starting volume</dt><dd>${air.v} cm³</dd></div><div><dt>final volume read</dt><dd>${c.fin.toFixed(1)} cm³</dd></div><div><dt>volume used</dt><dd>${(air.v-c.fin).toFixed(1)} cm³</dd></div><div><dt>% oxygen found</dt><dd>${c.pct.toFixed(1)}%</dd></div>`;
+    let s='<b>Result '+c.pct.toFixed(1)+'%.</b> ';
+    if(air.t<3&&c.f<0.9)s+='The heating time is too short, so some oxygen has not reacted. The volume is still too high.';
+    else if(!air.cool&&air.t>0)s+='The gas is still hot, so it takes up more space. The final volume is too big and the oxygen looks too low.';
+    else s+='All the oxygen has reacted and the gas is at room temperature, so the result is close to the real value of 21%.';
+    $('#air-status').innerHTML=s+'<span class="eqn">% oxygen = '+(air.v-c.fin).toFixed(1)+' ÷ '+air.v+' × 100</span>';
+  }else{
+    $('#air-read').innerHTML=`<div><dt>nitrogen</dt><dd>78%</dd></div><div><dt>oxygen</dt><dd>21%</dd></div><div><dt>argon</dt><dd>0.9%</dd></div><div><dt>carbon dioxide</dt><dd>0.04%</dd></div>`;
+    $('#air-status').innerHTML='<b>Dry air by volume.</b> Nitrogen and oxygen make up about 99%. Argon and carbon dioxide are tiny fractions.';
+  }
+  $('#air-bar').textContent=air.view==='exp'?'two gas syringes and heated copper':'composition of dry air by volume';
+}
+seg('air-view',v=>{air.view=v;airText()});
+$('#air-cool').addEventListener('change',e=>{air.cool=e.target.checked;airText()});
+$('#air-t').addEventListener('input',e=>{air.t=+e.target.value;airText()});
+$('#air-v').addEventListener('input',e=>{air.v=+e.target.value;airText()});
+function syringe(ctx,x,y,len,vol,maxv,C,label){
+  const H=26,bodyL=len;
+  ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.fillStyle=C.surface;ctx.fillRect(x,y,bodyL,H);ctx.strokeRect(x,y,bodyL,H);
+  const fill=bodyL*vol/maxv;
+  ctx.fillStyle='rgba(120,170,200,.35)';ctx.fillRect(x,y+1,fill,H-2);
+  ctx.fillStyle=C.ink;ctx.fillRect(x+fill-2,y-3,5,H+6);ctx.fillRect(x+fill,y+H/2-2,bodyL*1.0-fill+14,4);
+  ctx.fillRect(x+bodyL+10,y-6,4,H+12);
+  ctx.strokeStyle=C.muted;ctx.lineWidth=1;for(let i=0;i<=10;i++){const gx=x+bodyL*i/10;ctx.beginPath();ctx.moveTo(gx,y+H);ctx.lineTo(gx,y+H+(i%5===0?8:4));ctx.stroke()}
+  ctx.fillStyle=C.muted;ctx.font='11px '+getComputedStyle(document.body).getPropertyValue('--f-mono');ctx.textAlign='left';ctx.fillText(label,x,y-10);
+}
+loop.push((dt,C)=>{
+  if(active!=='air')return;
+  const o=cAir,ctx=o.ctx,w=o.w,h=o.h,mono=getComputedStyle(document.body).getPropertyValue('--f-mono');
+  ctx.clearRect(0,0,w,h);ctx.fillStyle=C.surface;ctx.fillRect(0,0,w,h);
+  if(air.view==='exp'){
+    air.phase+=dt*(air.t>0?1.1:0.0);
+    const c=airCalc(),maxv=160,L=Math.min(150,w*0.22);
+    const frac=air.t>0?0.5+0.5*Math.sin(air.phase*2.2):0;
+    const a=c.fin*(air.t>0?(1-frac):1),b=c.fin-a;
+    const sy=h*0.18;
+    syringe(ctx,w*0.04,sy,L,Math.min(maxv,Math.max(0,a)),maxv,C,'syringe A');
+    syringe(ctx,w*0.96-L-14,sy,L,Math.min(maxv,Math.max(0,b)),maxv,C,'syringe B');
+    // tube
+    const tx1=w*0.04+L+16,tx2=w*0.96-L-14-4,ty=sy+13;
+    ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w*0.04+L+14,ty);ctx.lineTo(tx1+8,ty);ctx.moveTo(tx2-4,ty);ctx.lineTo(w*0.96-L-14,ty);ctx.stroke();
+    const cu=mix('#b87333','#1d1d1d',c.f);
+    ctx.fillStyle=C.surface;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;rr(ctx,tx1+6,ty-20,tx2-tx1-6,40,10);ctx.fill();ctx.stroke();
+    ctx.fillStyle=cu;rr(ctx,tx1+18,ty-9,tx2-tx1-30,18,5);ctx.fill();
+    ctx.fillStyle=C.muted;ctx.font='11px '+mono;ctx.textAlign='center';ctx.fillText('copper'+(c.f>0.5?' → copper(II) oxide':''),(tx1+tx2)/2,ty-28);
+    // burner
+    if(air.t>0){const bx=(tx1+tx2)/2,fy=ty+22;ctx.fillStyle=C.ink;ctx.fillRect(bx-8,fy+34,16,26);
+      const fh=26+Math.sin(performance.now()/60)*3;ctx.fillStyle='#3a7bd5';ctx.globalAlpha=0.8;ctx.beginPath();ctx.moveTo(bx-9,fy+34);ctx.quadraticCurveTo(bx-8,fy+8,bx,fy+34-fh);ctx.quadraticCurveTo(bx+8,fy+8,bx+9,fy+34);ctx.fill();ctx.globalAlpha=1}
+    // bar of gas volume
+    const by=h*0.72,bw=w*0.84,bx=w*0.08;
+    ctx.fillStyle=C.grid;ctx.fillRect(bx,by,bw,22);
+    ctx.fillStyle='#7fa7c8';ctx.fillRect(bx,by,bw*air.v/150,22);
+    ctx.fillStyle=C.surface;ctx.globalAlpha=1;
+    const used=air.v-c.fin;
+    ctx.fillStyle='#c4572b';ctx.fillRect(bx+bw*c.fin/150,by,bw*Math.max(0,used)/150,22);
+    if(c.fin>air.v){ctx.fillStyle=C.bad;ctx.fillRect(bx+bw*air.v/150,by,bw*(c.fin-air.v)/150,22)}
+    ctx.strokeStyle=C.ink;ctx.lineWidth=1;ctx.strokeRect(bx,by,bw,22);
+    ctx.fillStyle=C.muted;ctx.textAlign='left';ctx.fillText('0',bx,by+38);ctx.textAlign='right';ctx.fillText('150 cm³',bx+bw,by+38);
+    ctx.textAlign='left';ctx.fillStyle=C.ink;ctx.fillText('gas volume now: '+c.fin.toFixed(0)+' cm³ (start '+air.v+')',bx,by-8);
+  }else{
+    const bx=w*0.06,bw=w*0.88,by=h*0.2,bh=46;
+    const parts=[['Nitrogen',78,'#4a7fb5'],['Oxygen',21,'#cf6a3a'],['Argon + CO₂ + others',1,'#6a6a78']];
+    let x=bx;parts.forEach(p=>{const ww=bw*p[1]/100;ctx.fillStyle=p[2];ctx.fillRect(x,by,ww,bh);ctx.fillStyle='#fff';ctx.font='bold 13px '+mono;ctx.textAlign='center';if(ww>60)ctx.fillText(p[1]+'%',x+ww/2,by+bh/2+5);x+=ww});
+    ctx.strokeStyle=C.ink;ctx.lineWidth=1;ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle=C.ink;ctx.font='13px '+mono;ctx.textAlign='left';ctx.fillText('Nitrogen 78%',bx,by-10);ctx.fillStyle='#cf6a3a';ctx.fillText('Oxygen 21%',bx+bw*0.78,by-10);
+    // zoom of last 1%
+    const zy=h*0.58,zh=34;ctx.strokeStyle=C.muted;ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(bx+bw*0.99,by+bh);ctx.lineTo(bx,zy);ctx.moveTo(bx+bw,by+bh);ctx.lineTo(bx+bw,zy);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=C.muted;ctx.textAlign='left';ctx.fillText('the last 1% magnified',bx,zy-8);
+    const ar=0.93,co=0.04,ot=1-ar-co;
+    const segs=[['Argon 0.9%',ar,'#6a6a78'],['CO₂ 0.04%',co,'#2e8b57'],['other',Math.max(0,ot),'#aaa']];
+    let zx=bx;segs.forEach(s=>{const ww=bw*s[1];ctx.fillStyle=s[2];ctx.fillRect(zx,zy,Math.max(ww,2),zh);zx+=ww});
+    ctx.fillStyle='#6a6a78';ctx.fillRect(bx,zy+zh+10,12,12);ctx.fillStyle=C.ink;ctx.fillText('Argon about 0.9%',bx+18,zy+zh+21);
+    ctx.fillStyle='#2e8b57';ctx.fillRect(bx+bw*0.45,zy+zh+10,12,12);ctx.fillStyle=C.ink;ctx.fillText('Carbon dioxide about 0.04%',bx+bw*0.45+18,zy+zh+21);
+  }
+});
+airText();
+
+/* ======================= BURN ======================= */
+const ELS={
+ Mg:{n:'Magnesium',flame:'bright white flame',prod:'magnesium oxide (white solid)',eq:'2Mg + O<sub>2</sub> → 2MgO',type:'basic oxide (metal)',ph:10.5,phTxt:'blue (alkaline)'},
+ H:{n:'Hydrogen',flame:'pale blue flame',prod:'water',eq:'2H<sub>2</sub> + O<sub>2</sub> → 2H<sub>2</sub>O',type:'neutral (water)',ph:7,phTxt:'green (neutral)'},
+ S:{n:'Sulfur',flame:'blue flame',prod:'sulfur dioxide (colourless, choking gas)',eq:'S + O<sub>2</sub> → SO<sub>2</sub>',type:'acidic oxide (non-metal)',ph:2.5,phTxt:'red / orange (acidic)'}
+};
+const bn={el:'S',on:false,t:0,water:false,ppm:40,parts:[]};
+const cBn=mk('c-burn',0.74);
+function rainPH(){return 5.6-1.6*Math.sqrt(bn.ppm/100)}
+function bnText(){
+  const e=ELS[bn.el];
+  $('#bn-ppm-o').textContent=bn.ppm+' (arbitrary units)';
+  $('#bn-read').innerHTML=`<div><dt>flame</dt><dd>${e.flame}</dd></div><div><dt>product</dt><dd>${e.prod}</dd></div><div><dt>type of oxide</dt><dd>${e.type}</dd></div><div><dt>rainwater pH</dt><dd>${rainPH().toFixed(1)}</dd></div>`;
+  $('#bn-status').innerHTML='<b>'+e.n+' + oxygen.</b><span class="eqn">'+e.eq+'</span>'+(bn.water?'<span class="eqn">Indicator colour: '+e.phTxt+'</span>':'')+'<span class="eqn">Clean rain is about pH 5.6. More sulfur dioxide gives a lower pH: acid rain (illustrative scale).</span>';
+}
+seg('bn-el',v=>{bn.el=v;bn.on=false;bn.t=0;bn.parts=[];bnText()});
+$('#bn-go').addEventListener('click',()=>{bn.on=true;bn.t=0;bn.parts=[]});
+$('#bn-reset').addEventListener('click',()=>{bn.on=false;bn.t=0;bn.parts=[]});
+$('#bn-water').addEventListener('change',e=>{bn.water=e.target.checked;bnText()});
+$('#bn-ppm').addEventListener('input',e=>{bn.ppm=+e.target.value;bnText()});
+loop.push((dt,C)=>{
+  if(active!=='burn')return;
+  const o=cBn,ctx=o.ctx,w=o.w,h=o.h,e=ELS[bn.el],mono=getComputedStyle(document.body).getPropertyValue('--f-mono');
+  if(bn.on)bn.t+=dt;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle=C.surface;ctx.fillRect(0,0,w,h);
+  const jx=w*0.3,jw=w*0.4,jy=h*0.05,jh=h*0.62;
+  // liquid (indicator) after reaction
+  const done=bn.on&&bn.t>4;
+  if(bn.water&&done){ctx.fillStyle=phColor(e.ph);ctx.globalAlpha=0.9;ctx.fillRect(jx+2,jy+jh*0.72,jw-4,jh*0.28-2);ctx.globalAlpha=1}
+  // gas in jar
+  ctx.fillStyle='rgba(140,190,230,.12)';ctx.fillRect(jx,jy,jw,jh);
+  ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(jx,jy);ctx.lineTo(jx,jy+jh);ctx.lineTo(jx+jw,jy+jh);ctx.lineTo(jx+jw,jy);ctx.stroke();
+  // spoon/wire
+  const cx=jx+jw/2,top=jy+jh*0.42;
+  ctx.strokeStyle=C.muted;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx,jy-8);ctx.lineTo(cx,top);ctx.stroke();
+  ctx.fillStyle=C.muted;ctx.beginPath();ctx.arc(cx,top+7,12,0,Math.PI);ctx.fill();
+  const burning=bn.on&&bn.t<4;
+  // sample
+  if(!bn.on||burning){ctx.fillStyle=bn.el==='Mg'?'#b9bcc0':bn.el==='S'?'#e6d143':'#cfe3f2';if(bn.el==='H'){ctx.strokeStyle=C.muted;ctx.lineWidth=1;ctx.strokeRect(cx-30,jy+jh*0.15,60,20);ctx.fillRect(cx-30,jy+jh*0.15,60,20)}else{ctx.beginPath();ctx.ellipse(cx,top+1,bn.on?10*(1-bn.t/5):10,6,0,0,7);ctx.fill()}}
+  if(bn.on&&!burning&&bn.el==='Mg'){ctx.fillStyle='#f4f4f0';ctx.beginPath();ctx.ellipse(cx,top+4,16,5,0,0,7);ctx.fill()}
+  // flame
+  if(burning){
+    const fl=bn.el==='Mg'?{c:'#ffffff',g:'rgba(255,255,230,.5)',h:50}:bn.el==='H'?{c:'#9ec9ff',g:'rgba(120,180,255,.25)',h:44}:{c:'#3b6fe0',g:'rgba(70,110,230,.25)',h:34};
+    const ph=performance.now()/70;const fh=fl.h+Math.sin(ph)*5;
+    ctx.fillStyle=fl.g;ctx.beginPath();ctx.arc(cx,top-fh*0.4,fh*(bn.el==='Mg'?1.4:0.9),0,7);ctx.fill();
+    ctx.fillStyle=fl.c;ctx.beginPath();ctx.moveTo(cx-12,top);ctx.quadraticCurveTo(cx-14,top-fh*0.5,cx+Math.sin(ph*1.3)*4,top-fh);ctx.quadraticCurveTo(cx+14,top-fh*0.5,cx+12,top);ctx.closePath();ctx.fill();
+    if(bn.el==='Mg'&&Math.random()<0.5)bn.parts.push({x:cx,y:top-10,vx:(Math.random()-0.5)*120,vy:-Math.random()*90,l:0.6});
+  }
+  bn.parts=bn.parts.filter(p=>{p.l-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=160*dt;ctx.fillStyle='rgba(255,255,255,'+Math.max(0,p.l)+')';ctx.fillRect(p.x,p.y,2.5,2.5);return p.l>0});
+  // product visuals
+  if(bn.on&&bn.t>1&&bn.el==='H'){for(let i=0;i<10;i++){ctx.fillStyle='rgba(120,180,230,.7)';ctx.beginPath();ctx.arc(jx+8+((i*37)%(jw-16)),jy+jh*0.5+((i*53)%(jh*0.4)),Math.min(3,bn.t/2),0,7);ctx.fill()}}
+  if(bn.on&&bn.el==='S'){const n=Math.min(1,bn.t/3);ctx.strokeStyle='rgba(150,150,170,'+0.5*n+')';ctx.lineWidth=2;for(let i=0;i<4;i++){ctx.beginPath();const bx=cx-40+i*26;ctx.moveTo(bx,jy+jh*0.35);ctx.bezierCurveTo(bx-15,jy+jh*0.25,bx+15,jy+jh*0.15,bx,jy+8);ctx.stroke()}}
+  ctx.fillStyle=C.muted;ctx.font='12px '+mono;ctx.textAlign='left';
+  ctx.fillText(bn.on?(burning?'burning in oxygen':'reaction finished'):'press Ignite',12,h*0.69);
+  if(bn.on&&!burning)ctx.fillText('product: '+e.prod.split(' (')[0],12,h*0.68+16);
+  // pH scale
+  const sy=h*0.8,sx=w*0.06,sw=w*0.88;
+  for(let i=0;i<sw;i++){ctx.fillStyle=phColor(14*i/sw);ctx.fillRect(sx+i,sy,1.5,16)}
+  ctx.strokeStyle=C.ink;ctx.lineWidth=1;ctx.strokeRect(sx,sy,sw,16);
+  ctx.fillStyle=C.muted;ctx.textAlign='center';[0,2,4,6,7,8,10,12,14].forEach(p=>ctx.fillText(p,sx+sw*p/14,sy+30));
+  ctx.textAlign='left';ctx.fillStyle=C.ink;ctx.fillText('universal indicator colour and pH',sx,sy-8);
+  const rp=rainPH(),mx=sx+sw*rp/14;
+  ctx.fillStyle=C.ink;ctx.beginPath();ctx.moveTo(mx,sy-2);ctx.lineTo(mx-6,sy-14);ctx.lineTo(mx+6,sy-14);ctx.closePath();ctx.fill();
+  ctx.textAlign='right';ctx.fillText('rain pH '+rp.toFixed(1),sx+sw,sy+46);
+  if(bn.water&&done){const hp=sx+sw*e.ph/14;ctx.fillStyle=C.amber;ctx.beginPath();ctx.moveTo(hp,sy+18);ctx.lineTo(hp-6,sy+30);ctx.lineTo(hp+6,sy+30);ctx.closePath();ctx.fill()}
+});
+bnText();
+
+/* ---------------- start ---------------- */
+requestAnimationFrame(frame);
+showTab(location.hash.slice(1)||'g1',false);
+</script>
+
+</body></html>
